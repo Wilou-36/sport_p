@@ -27,8 +27,13 @@ WORKDIR /app
 COPY . .
 
 # ---------- Install Symfony dependencies (production) ----------
+RUN rm -rf var/cache/*
+
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
+# Clear & warmup cache en production
+RUN php bin/console cache:clear --env=prod
+RUN php bin/console cache:warmup --env=prod
 # ---------- Ensure var directory exists ----------
 RUN mkdir -p var && chmod -R 777 var
 
