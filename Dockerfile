@@ -1,5 +1,7 @@
+# ---------- Base PHP ----------
 FROM php:8.2-cli-alpine
 
+# ---------- Install system deps ----------
 RUN apk add --no-cache \
     git \
     unzip \
@@ -8,20 +10,37 @@ RUN apk add --no-cache \
     oniguruma-dev \
     postgresql-dev
 
-RUN docker-php-ext-install pdo pdo_pgsql intl zip
+# ---------- Install PHP extensions ----------
+RUN docker-php-ext-install \
+    pdo \
+    pdo_pgsql \
+    intl \
+    zip
 
+# ---------- Install Composer ----------
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# ---------- Working directory ----------
 WORKDIR /app
+
+# ---------- Copy project ----------
 COPY . .
 
+# ---------- Install Symfony dependencies (production) ----------
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
+# ---------- Ensure var directory exists ----------
 RUN mkdir -p var && chmod -R 777 var
 
+# ---------- Force production mode inside container ----------
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
 
+# ---------- Prevent .env crash ----------
+RUN touch .env
+
+# ---------- Expose Render port ----------
 EXPOSE 10000
 
-CMD php -S 0.0.0.0:$PORT -t public
+# ---------- Start PHP server ----------
+CMD php -d variables_order=EGPCS -S 0.0.0.0:$PORT -t public
