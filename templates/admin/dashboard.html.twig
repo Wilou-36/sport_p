@@ -1,0 +1,34 @@
+{% extends 'app/base.html.twig' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block body %}
+
+<div style="display:flex; gap:30px;">
+
+    <div style="width:250px; background:#111827; padding:20px; border-radius:10px;">
+        <h3>Menu Admin</h3>
+        <p><a href="{{ path('admin_dashboard') }}">Dashboard</a></p>
+        <a href="{{ path('admin_users') }}" class="btn btn-admin">
+            👥 Utilisateurs
+        </a>
+
+        <a href="{{ path('admin_seances') }}" class="btn btn-admin">
+            📅 Séances
+        </a>
+
+        <a href="{{ path('admin_settings') }}" class="btn btn-admin">
+            ⚙ Paramètres
+        </a>
+    </div>
+
+    <div style="flex:1;">
+        <h2>Bienvenue {{ app.user.premon }}</h2>
+        <p>Interface d’administration Sport Pro Performance</p>
+    </div>
+
+</div>
+
+
+
+{% endblock %}

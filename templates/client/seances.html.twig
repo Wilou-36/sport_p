@@ -1,0 +1,79 @@
+{% extends 'app/base.html.twig' %}
+
+{% block page_title %}Mes séances{% endblock %}
+
+{% block body %}
+
+<div class="seance-container">
+
+    <div class="seance-header">
+        <h2>📅 Prochaine séance</h2>
+
+        <a href="{{ path('client_reservations') }}" class="btn-add-seance">
+            ➕ Ajouter une nouvelle séance
+        </a>
+    </div>
+
+    {% if nextSeance %}
+
+        <div class="seance-card">
+
+            <div class="seance-info">
+
+                <div class="info-item">
+                    <span class="label">📆 Date</span>
+                    <span class="value">
+                        {{ nextSeance.date|date('d/m/Y') }}
+                    </span>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">⏰ Heure</span>
+                    <span class="value">
+                        {{ nextSeance.date|date('H:i') }}
+                    </span>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">📍 Lieu</span>
+                    <span class="value">
+                        {{ nextSeance.lieu }}
+                    </span>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">🏋 Coach</span>
+                    <span class="value">
+                        {{ nextSeance.coach.user.prenom }} {{ nextSeance.coach.user.nom }}
+                    </span>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">🕒 Durée</span>
+                    <span class="value">
+                        {{ nextSeance.duree }} min
+                    </span>
+                </div>
+
+                <div class="info-item">
+                    <span class="label">🎯 Type</span>
+                    <span class="value">
+                        {{ nextSeance.type }}
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    {% else %}
+
+        <div class="seance-card">
+            <p>Aucune séance programmée.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

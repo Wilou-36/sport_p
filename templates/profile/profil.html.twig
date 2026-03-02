@@ -1,0 +1,174 @@
+{% extends 'app/base.html.twig' %}
+
+{% block title %}Mon Profil Premium{% endblock %}
+
+{% block body %}
+<div class="premium-profile-container">
+
+    <!-- ================= HEADER PREMIUM ================= -->
+
+    <div class="premium-profile-card">
+
+        <div class="avatar-section">
+            <div class="avatar-wrapper">
+
+                {% if app.user.photo %}
+                    <img src="{{ asset('uploads/profiles/' ~ app.user.photo) }}" 
+                         class="premium-avatar">
+                {% else %}
+                    <img src="{{ asset('images/avatar.png') }}" 
+                         class="premium-avatar">
+                {% endif %}
+
+                <label for="photoUpload" class="avatar-overlay">
+                    📷
+                </label>
+
+            </div>
+
+            <form action="{{ path('profile_upload_photo', {'_locale': app.request.locale}) }}" 
+                  method="POST" 
+                  enctype="multipart/form-data">
+
+                <input type="file"
+                       id="photoUpload"
+                       name="photo"
+                       accept="image/*"
+                       capture="environment"
+                       hidden
+                       onchange="this.form.submit()">
+
+            </form>
+        </div>
+
+        <div class="profile-info">
+            <h2>{{ app.user.prenom }} {{ app.user.nom }}</h2>
+            <p class="email">{{ app.user.email }}</p>
+
+            <a href="{{ path('profile_edit', {'_locale': app.request.locale}) }}" 
+               class="btn-premium-edit">
+                ✏ Modifier le profil
+            </a>
+        </div>
+
+    </div>
+
+
+    <!-- ================= STATS PREMIUM ================= -->
+
+    <div class="stats-grid">
+
+        {# ===== CLIENT ===== #}
+        {% if 'ROLE_CLIENT' in app.user.roles and app.user.client %}
+
+            <div class="stat-card highlight">
+            <h3>🎯 Performance cible</h3>
+            <p>
+                {% if objectifActif and objectifActif.performanceObjectif %}
+                    {{ objectifActif.performanceObjectif }}
+                {% else %}
+                    Non définie
+                {% endif %}
+            </p>
+        </div>
+
+            <div class="stat-card">
+                <h3>Taille</h3>
+                <p>{{ app.user.client.taille ?? '-' }} cm</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Poids</h3>
+                <p>{{ app.user.client.poids ?? '-' }} kg</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Sport</h3>
+                <p>{{ app.user.client.sport.nom ?? '-' }}</p>
+            </div>
+
+        {% endif %}
+
+
+        {# ===== COACH ===== #}
+        {% if 'ROLE_COACH' in app.user.roles and app.user.coach %}
+
+            <div class="stat-card">
+                <h3>Spécialité</h3>
+                <p>{{ app.user.coach.specialite ?? '-' }}</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Expérience</h3>
+                <p>{{ app.user.coach.experience ?? '-' }}</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Sport principal</h3>
+                <p>{{ app.user.coach.sport.nom ?? '-' }}</p>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================= PARAMETRES PREMIUM ================= -->
+
+    <div class="settings-card">
+        <h3>Paramètres</h3>
+
+        <div class="setting-item">
+            <span>Changer mot de passe</span>
+            <a href="{{ path('change_password', {'_locale': app.request.locale}) }}" 
+               class="setting-btn">
+                Modifier
+            </a>
+        </div>
+
+        <div class="setting-item">
+            <span>Notifications</span>
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting-item">
+            <span>Langue</span>
+            <div class="language-dropdown">
+                <button class="lang-btn-toggle" onclick="toggleLangMenu(event)">
+                    🌍 {{ app.request.locale|upper }}
+                    <span class="arrow">▾</span>
+                </button>
+                <div class="lang-menu" id="langMenu">
+                    {% set current_route = app.request.attributes.get('_route') ?: 'home' %}
+                    {% set route_params = app.request.attributes.get('_route_params') ?: {} %}
+                    {% for locale in ['fr','en','de','es','pt'] %}
+                        {% set params = route_params|merge({'_locale': locale}) %}
+                        <a href="{{ path(current_route, params) }}" class="lang-option">
+                            {{ locale|upper }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="setting-item">
+            <span>Mode sombre</span>
+            <label class="switch">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting-item logout">
+            <a href="{{ path('app_logout', {'_locale': app.request.locale}) }}" 
+               class="logout-link">
+                Se déconnecter
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

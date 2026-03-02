@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+
+class ContactController extends AbstractController
+{
+    #[Route('/contact', name: 'nous_contacter')]
+    public function contact(Request $request, MailerInterface $mailer): Response
+    {
+        if ($request->isMethod('POST')) {
+
+            $nom = $request->request->get('nom');
+            $prenom = $request->request->get('prenom');
+            $emailExpediteur = $request->request->get('email');
+            $objet = $request->request->get('objet');
+            $message = $request->request->get('message');
+
+            $email = (new Email())
+                ->from($emailExpediteur)
+                ->to('williams.drg36@gmail.com')
+                ->subject($objet)
+                ->text(
+                    "Nom : $nom\n" .
+                    "Prénom : $prenom\n" .
+                    "Email : $emailExpediteur\n\n" .
+                    "Message :\n$message"
+                );
+
+            $mailer->send($email);
+
+            $this->addFlash('success', 'Votre message a bien été envoyé !');
+
+            return $this->redirectToRoute('nous_contacter');
+        }
+
+        return $this->render('contact.html.twig');
+    }
+}

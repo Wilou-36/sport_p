@@ -1,0 +1,36 @@
+{% extends 'app/base.html.twig' %}
+
+{% block body %}
+<div class="admin-container">
+
+    <h1>Espace Admin</h1>
+    <hr>
+
+    {% block admin_content %}
+        <div class="coach-dashboard">
+            <div class="dashboard-grid-coach">
+
+                <a href="{{ path('admin_users') }}" class="dashboard-card-coach">
+                    <div class="card-icon">👥</div>
+                    <h3>Gestions des Utilisateurs</h3>
+                    <p>Gérer les Utilisateurs</p>
+                </a>
+
+                <a href="{{ path('admin_seances') }}" class="dashboard-card-coach">
+                    <div class="card-icon">📅</div>
+                    <h3>Séances</h3>
+                    <p>Planifier & organiser</p>
+                </a>
+
+                <a href="{{ path('admin_settings') }}" class="dashboard-card-coach">
+                    <div class="card-icon">⚙</div>
+                    <h3>Paramètres</h3>
+                    <p>Gérer votre compte</p>
+                </a>
+
+            </div>
+        </div>
+    {% endblock %}
+
+</div>
+{% endblock %}

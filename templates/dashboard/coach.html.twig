@@ -1,0 +1,43 @@
+{% extends 'app/base.html.twig' %}
+
+{% block body %}
+
+<div class="coach-dashboard">
+
+    <div class="dashboard-header">
+        <h1>🏋️ Bienvenue Coach {{ app.user.prenom }}</h1>
+        <p>Prèt à performer</p>
+    </div>
+
+    <div class="dashboard-grid-coach">
+
+        <a href="{{ path('coach_clients') }}" class="dashboard-card-coach">
+            <div class="card-icon">👥</div>
+            <h3>Mes Clients</h3>
+            <p>Gérer et suivre vos athlètes</p>
+        </a>
+
+        <a href="{{ path('coach_seances') }}" class="dashboard-card-coach">
+            <div class="card-icon">📅</div>
+            <h3>Séances</h3>
+            <p>Planifier & organiser</p>
+        </a>
+
+        <a href="#" class="dashboard-card-coach">
+            <div class="card-icon">📊</div>
+            <h3>Statistiques</h3>
+            <p>Analyse des performances</p>
+        </a>
+
+
+        <a href="{{ path('coach_profile') }}" class="dashboard-card-coach">
+            <div class="card-icon">👤</div>
+            <h3>Mon Profil</h3>
+            <p>Modifier votre profil</p>
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

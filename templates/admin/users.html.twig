@@ -1,0 +1,123 @@
+{% extends 'dashboard/admin.html.twig' %}
+
+{% block admin_content %}
+
+<h2>Gestion des utilisateurs</h2>
+
+{# 🔍 Barre de recherche #}
+<form method="get" action="{{ path('admin_users') }}" style="margin-bottom:20px;">
+    <input type="text" name="search"
+           placeholder="Rechercher un utilisateur..."
+           value="{{ app.request.get('search') }}">
+
+    <button type="submit" class="btn btn-search">Rechercher</button>
+
+    {# 🔙 Bouton retour (reset filtre) #}
+    <a href="{{ path('admin_users') }}" class="btn btn-reset">
+        Retour
+    </a>
+</form>
+
+{# 🔐 Bouton visible uniquement pour ctrl_admin #}
+{% if app.user and app.user.ctrlAdmin %}
+    <div style="margin-bottom:20px;">
+        <a href="{{ path('admin_new_user') }}" class="btn btn-admin">
+            ➕ Créer un nouveau compte administrateur
+        </a>
+    </div>
+{% endif %}
+
+<table class="full-width-table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Âge</th>
+            <th>Objectifs</th>
+            <th>Spécialité</th>
+            <th>Expérience</th>
+            <th>Super Admin</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    {% for user in users %}
+        <tr>
+            <td>{{ user.nom }}</td>
+            <td>{{ user.prenom }}</td>
+            <td>{{ user.email }}</td>
+
+            <td>
+                {% if 'ROLE_ADMIN' in user.roles %}
+                    Admin
+                {% elseif 'ROLE_COACH' in user.roles %}
+                    Coach
+                {% elseif 'ROLE_CLIENT' in user.roles %}
+                    Client
+                {% else %}
+                    Autre
+                {% endif %}
+            </td>
+
+            {# CLIENT #}
+            {% if 'ROLE_CLIENT' in user.roles and user.client %}
+                <td>{{ user.client.age }}</td>
+                <td>{{ user.client.objectifs }}</td>
+                <td>-</td>
+                <td>-</td>
+
+            {# COACH #}
+            {% elseif 'ROLE_COACH' in user.roles and user.coach %}
+                <td>-</td>
+                <td>-</td>
+                <td>{{ user.coach.specialite }}</td>
+                <td>{{ user.coach.experience }} ans</td>
+
+            {% else %}
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            {% endif %}
+
+            {# Super Admin #}
+            <td>
+                {% if user.ctrlAdmin %}
+                    <span style="color:green;font-weight:bold;">Oui</span>
+                {% else %}
+                    Non
+                {% endif %}
+            </td>
+
+            {# Actions #}
+            <td>
+                <a href="{{ path('admin_user_edit', {'id': user.id}) }}"
+                   class="btn-edit">Modifier</a>
+
+                <form method="post"
+                      action="{{ path('admin_user_delete', {'id': user.id}) }}"
+                      style="display:inline;"
+                      onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
+
+                    <input type="hidden"
+                           name="_token"
+                           value="{{ csrf_token('delete' ~ user.id) }}">
+
+                    <button class="btn-delete">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+
+    {% else %}
+        <tr>
+            <td colspan="10">Aucun utilisateur trouvé</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+{% endblock %}

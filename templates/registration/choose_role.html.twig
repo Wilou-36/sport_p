@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choisir un rôle{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+
+            <h2>Choisissez votre rôle</h2>
+
+            <form method="post">
+
+                <div class="row mt-4">
+
+                    <div class="col-6">
+                        <input type="radio" id="role_client" name="role" value="client" class="role-input" required>
+                        <label for="role_client" class="role-card">
+                            <h4>Client</h4>
+                            <p>Je veux être accompagné par un coach</p>
+                        </label>
+                    </div>
+
+                    <div class="col-6">
+                        <input type="radio" id="role_coach" name="role" value="coach" class="role-input" required>
+                        <label for="role_coach" class="role-card">
+                            <h4>Coach</h4>
+                            <p>Je veux proposer mes services</p>
+                        </label>
+                    </div>
+
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ path('app_register') }}" class="btn btn-outline-secondary">
+                        ← Retour
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        Suivant →
+                    </button>
+                </div>
+
+            </form>>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

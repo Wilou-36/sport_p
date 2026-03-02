@@ -1,0 +1,181 @@
+{% extends 'app/base.html.twig' %}
+
+{% block body %}
+
+<div class="coach-seances-premium">
+
+    {# ===============================
+       CALCUL TOTAL RESERVATIONS EN ATTENTE
+    =============================== #}
+    {% set totalEnAttente = 0 %}
+    {% for s in seances %}
+        {% for r in s.reservations %}
+            {% if r.statut == 'EN_ATTENTE' %}
+                {% set totalEnAttente = totalEnAttente + 1 %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+    <!-- HEADER -->
+    <div class="seances-header" style="position:relative;">
+        <h1>📅 Gestion des Séances</h1>
+        <p>Planifiez et gérez vos entraînements</p>
+
+        <!-- 🔔 NOTIFICATION BELL -->
+        <div class="notification-wrapper">
+            <button id="notificationBell"
+                class="notification-bell {% if totalEnAttente > 0 %}active{% endif %}">
+                🔔
+                {% if totalEnAttente > 0 %}
+                    <span class="notif-count">{{ totalEnAttente }}</span>
+                {% endif %}
+            </button>
+        </div>
+    </div>
+
+    <!-- 🔔 PANEL RESERVATIONS -->
+    <div id="notificationPanel" class="notification-panel">
+        <h3>Réservations en attente</h3>
+
+        {% for seance in seances %}
+            {% for reservation in seance.reservations %}
+                {% if reservation.statut == 'EN_ATTENTE' %}
+
+                    <div class="reservation-item">
+
+                        <div>
+                            <strong>
+                                {{ reservation.client.user.prenom }}
+                                {{ reservation.client.user.nom }}
+                            </strong>
+                            <small>
+                                — {{ seance.type }}
+                                ({{ seance.date|date('d/m H:i') }})
+                            </small>
+                        </div>
+
+                        <div class="actions">
+
+                            <a href="{{ path('valider_reservation', {
+                                'id': reservation.id
+                            }) }}"
+                            class="btn-validate">
+                                ✅ Valider
+                            </a>
+
+                            <a href="{{ path('refuser_reservation', {
+                                'id': reservation.id
+                            }) }}"
+                            class="btn-refuse">
+                                ❌ Refuser
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+
+        {% if totalEnAttente == 0 %}
+            <p>Aucune réservation en attente.</p>
+        {% endif %}
+    </div>
+
+    <!-- ===============================
+         FORMULAIRE CREATION
+    =============================== -->
+
+    <div class="seance-create-card">
+        <h3>➕ Nouvelle séance</h3>
+
+        {{ form_start(form) }}
+
+        <div class="form-grid">
+            <div>
+                {{ form_label(form.date) }}
+                {{ form_widget(form.date) }}
+            </div>
+
+            <div>
+                {{ form_label(form.lieu) }}
+                {{ form_widget(form.lieu) }}
+            </div>
+
+            <div>
+                {{ form_label(form.duree) }}
+                {{ form_widget(form.duree) }}
+            </div>
+
+            <div>
+                {{ form_label(form.type) }}
+                {{ form_widget(form.type) }}
+            </div>
+        </div>
+
+        <button class="btn-premium">Créer la séance</button>
+
+        {{ form_end(form) }}
+    </div>
+
+    <!-- ===============================
+         LISTE DES SEANCES
+    =============================== -->
+
+    <div class="seances-list-premium">
+
+        {% for seance in seances %}
+
+            <div class="seance-premium-card">
+
+                <div class="seance-date-block">
+                    <div class="day">
+                        {{ seance.date|date('d') }}
+                    </div>
+                    <div class="month">
+                        {{ seance.date|date('M') }}
+                    </div>
+                </div>
+
+                <div class="seance-content">
+                    <h3>{{ seance.type }}</h3>
+
+                    <p>📍 {{ seance.lieu }}</p>
+                    <p>⏱ {{ seance.duree }} min</p>
+                    <p>🕒 {{ seance.date|date('H:i') }}</p>
+                    <p>👥 {{ seance.reservations|length }} / {{ seance.capaciteMax }}</p>
+
+                    {% if seance.date > "now"|date %}
+                        <span class="badge upcoming">À venir</span>
+                    {% else %}
+                        <span class="badge done">Terminée</span>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        {% else %}
+            <div class="empty-state">
+                <p>Aucune séance programmée</p>
+            </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<!-- ===============================
+     SCRIPT TOGGLE NOTIFICATION
+=============================== -->
+
+<script>
+document.getElementById("notificationBell")
+    .addEventListener("click", function () {
+        document.getElementById("notificationPanel")
+            .classList.toggle("show");
+});
+</script>
+
+{% endblock %}

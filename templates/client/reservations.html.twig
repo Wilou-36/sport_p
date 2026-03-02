@@ -1,0 +1,83 @@
+{% extends 'app/base.html.twig' %}
+
+{% block body %}
+
+<div class="app-main">
+
+    <div class="dashboard-header">
+        <h1>📅 Séances disponibles</h1>
+        <a href="{{ path('client_dashboard') }}" class="btn-secondary">
+            ⬅ Retour
+        </a>
+    </div>
+
+    <form method="get" class="card" style="margin-bottom:30px;">
+        <div class="stats-grid">
+            <input type="text" name="lieu" placeholder="Rechercher par lieu" value="{{ app.request.get('lieu') }}">
+            <input type="text" name="type" placeholder="Type de séance" value="{{ app.request.get('type') }}">
+            <button class="btn-premium">🔎 Rechercher</button>
+        </div>
+    </form>
+
+    {% if seances is not empty %}
+
+        {% for seance in seances %}
+
+            <div class="card">
+
+                <div class="stats-grid">
+
+                    <div>
+                        <strong>📆 Date</strong><br>
+                        {{ seance.date|date('d/m/Y H:i') }}
+                    </div>
+
+                    <div>
+                        <strong>📍 Lieu</strong><br>
+                        {{ seance.lieu }}
+                    </div>
+
+                    <div>
+                        <strong>🏋 Coach</strong><br>
+                        {{ seance.coach.user.prenom }} {{ seance.coach.user.nom }}
+                    </div>
+
+                    <div>
+                        <strong>👥 Participants</strong><br>
+                        {{ seance.reservations|length }} / {{ seance.capaciteMax }}
+                    </div>
+
+                    <div>
+                        {% if seance.placesRestantes > 0 %}
+                            <span class="badge upcoming">
+                                ✅ {{ seance.placesRestantes }} places restantes
+                            </span>
+                        {% else %}
+                            <span class="badge done">
+                                ❌ Complet
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <a href="{{ path('client_reserver', {'id': seance.id}) }}"
+                        class="btn-premium">
+                        Réserver
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="card">
+            Aucune séance disponible pour le moment.
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'app/base.html.twig' %}
+
+{% block title %}Ajouter Objectif{% endblock %}
+
+{% block body %}
+<div class="objectif-wrapper">
+
+    <div class="objectif-card">
+
+        <div class="objectif-header">
+            <h2>🎯 Nouvel Objectif</h2>
+            <p>Planifiez votre prochaine progression</p>
+        </div>
+
+        {{ form_start(form, {'attr': {'class': 'objectif-form'}}) }}
+
+        <div class="objectif-grid">
+
+            <div class="objectif-section">
+                <h4>Performance</h4>
+                {{ form_row(form.vo2Objectif) }}
+                {{ form_row(form.chargeHebdoObjectif) }}
+                {{ form_row(form.masseGrasseObjectif) }}
+                {{ form_row(form.performanceObjectif) }}
+            </div>
+
+            <div class="objectif-section">
+                <h4>Planification</h4>
+                {{ form_row(form.competitionNom) }}
+                {{ form_row(form.competitionDate) }}
+                {{ form_row(form.dateDebut) }}
+                {{ form_row(form.dateFin) }}
+                {{ form_row(form.macrocycle) }}
+                {{ form_row(form.mesocycle) }}
+            </div>
+
+        </div>
+
+        <div class="objectif-actions">
+            <button class="btn-save">
+                💾 Enregistrer
+            </button>
+        </div>
+
+        {{ form_end(form) }}
+
+    </div>
+
+</div>
+{% endblock %}

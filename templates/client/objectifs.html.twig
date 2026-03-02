@@ -1,0 +1,65 @@
+{% extends 'app/base.html.twig' %}
+
+{% block title %}Mes Objectifs{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+
+    <h2>🎯 Objectifs</h2>
+
+    <a href="{{ path('client_objectif_add') }}" class="btn btn-primary mb-3">
+        ➕ Ajouter un objectif
+    </a>
+
+    {% if objectifActif %}
+        <div class="alert alert-success">
+            <strong>Objectif Actif :</strong>
+            {{ objectifActif.macrocycle }}
+            ({{ objectifActif.getStatut() }})
+        </div>
+    {% endif %}
+
+    <h4>📊 Charge d'entraînement</h4>
+    <canvas id="chargeChart"></canvas>
+
+    <hr>
+
+    {% for objectif in objectifs %}
+        <div class="card p-3 mb-3">
+            <strong>{{ objectif.macrocycle }}</strong>
+            <span class="badge bg-info">
+                {{ objectif.getStatut() }}
+            </span>
+            <br>
+            {{ objectif.dateDebut|date('d/m/Y') }}
+            →
+            {{ objectif.dateFin|date('d/m/Y') }}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">
+            Aucun objectif enregistré.
+        </div>
+    {% endfor %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('chargeChart');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ dates|json_encode|raw }},
+        datasets: [{
+            label: 'Charge',
+            data: {{ charges|json_encode|raw }},
+            borderWidth: 3,
+            tension: 0.3
+        }]
+    }
+});
+</script>
+
+{% endblock %}

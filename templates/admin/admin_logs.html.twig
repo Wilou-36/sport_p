@@ -1,0 +1,24 @@
+{% extends 'dashboard/admin.html.twig' %}
+
+{% block admin_content %}
+<h2>Journal des créations administrateur</h2>
+
+<table class="full-width-table">
+    <thead>
+        <tr>
+            <th>Créé par</th>
+            <th>Email du nouvel admin</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for log in logs %}
+        <tr>
+            <td>{{ log.createdBy.email }}</td>
+            <td>{{ log.createdUserEmail }}</td>
+            <td>{{ log.createdAt|date('d/m/Y H:i') }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

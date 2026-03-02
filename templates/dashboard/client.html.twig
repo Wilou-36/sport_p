@@ -1,0 +1,107 @@
+{% extends 'app/base.html.twig' %}
+
+{% block title %}Dashboard Client{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/client_dashboard.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="dashboard-wrapper">
+
+    <!-- HEADER + BUTTONS -->
+    <div class="dashboard-top">
+        <div class="dashboard-header">
+            <h2>Bonjour {{ app.user.prenom }}</h2>
+            <p>Objectif : {{ app.user.client.monthlyGoal ?? 12 }} séances</p>
+        </div>
+
+        <div class="dashboard-actions">
+            <a href="{{ path('client_seances') }}" class="btn-primary">
+                📅 Mes séances
+            </a>
+            <a href="{{ path('client_objectifs') }}" class="btn-secondary">
+                🎯 Mes Objectifs
+            </a>
+        </div>
+    </div>
+
+    <!-- GRID 60 / 40 -->
+    <div class="dashboard-grid">
+
+        <div class="graph-box">
+            <canvas id="sessionsChart"></canvas>
+        </div>
+
+        <div class="stats-box">
+            <div class="stat-card">
+                <h4>Âge</h4>
+                <p>{{ app.user.client.age ?? '-' }}</p>
+            </div>
+
+            <div class="stat-card">
+                <h4>Ce mois</h4>
+                <p id="monthlySessions">...</p>
+            </div>
+
+            <div class="stat-card highlight">
+                <h4>Progression</h4>
+                <p id="progressRate">...</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- NEXT SESSION -->
+    <div class="next-session">
+        <div id="nextSessionCard">Chargement prochaine séance...</div>
+    </div>
+
+</div>
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    new Chart(document.getElementById('sessionsChart'), {
+        type: 'line',
+        data: {
+            labels: {{ dates|json_encode|raw }},
+            datasets: [
+                {
+                    label: 'Charge d\'entraînement',
+                    data: {{ charges|json_encode|raw }},
+                    borderColor: '#ff6a00',
+                    backgroundColor: 'rgba(255,106,0,0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+});
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'client/layout.html.twig' %}
+{% set isMobile = app.request.headers.get('User-Agent') matches '/Mobile|Android|iPhone/' %}
+{% block content %}
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}SportPro{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        {% if isMobile %}
+            <link rel="stylesheet" href="{{ asset('css/client_app.css') }}">
+        {% else %}
+            <link rel="stylesheet" href="{{ asset('css/client_dashboard.css') }}">
+        {% endif %}
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+
+    <body class="{{ isMobile ? 'mobile-app' : 'desktop-app' }} ultra-dark">
+
+        <div class="app-container">
+
+            {% block content %}{% endblock %}
+
+            {% if isMobile %}
+            <nav class="bottom-nav">
+                <a href="{{ path('client_dashboard') }}">🏠</a>
+                <a href="{{ path('client_stats') }}">📊</a>
+                <a href="{{ path('client_seances') }}">📅</a>
+                <a href="{{ path('app_logout') }}">🚪</a>
+            </nav>
+            {% endif %}
+
+        </div>
+
+    </body>
+    </html>
+{% endblock %}

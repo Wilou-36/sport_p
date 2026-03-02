@@ -1,0 +1,124 @@
+{% extends 'dashboard/admin.html.twig' %}
+
+{% block admin_content %}
+
+<h2>Gestion des séances</h2>
+
+{# 🔍 Barre de recherche avancée #}
+<form method="get" action="{{ path('admin_seances') }}" class="search-form">
+
+    <input type="text" name="coach"
+           placeholder="Coach..."
+           value="{{ app.request.get('coach') }}">
+
+    <input type="date" name="date"
+           value="{{ app.request.get('date') }}">
+
+    <input type="text" name="lieu"
+           placeholder="Lieu..."
+           value="{{ app.request.get('lieu') }}">
+
+    <select name="reservation">
+        <option value="">-- Réservations --</option>
+        <option value="oui" {{ app.request.get('reservation') == 'oui' ? 'selected' }}>
+            Avec réservation
+        </option>
+        <option value="non" {{ app.request.get('reservation') == 'non' ? 'selected' }}>
+            Sans réservation
+        </option>
+    </select>
+
+    <button type="submit" class="btn btn-search">Rechercher</button>
+
+    {% if app.request.query.all %}
+        <a href="{{ path('admin_seances') }}" class="btn btn-reset">
+            Réinitialiser
+        </a>
+    {% endif %}
+
+</form>
+
+<table class="full-width-table">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Date / Heure</th>
+            <th>Durée (min)</th>
+            <th>Lieu</th>
+            <th>Coach</th>
+            <th>Spécialité</th>
+            <th>Expérience</th>
+            <th>Réservations</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    {% for seance in seances %}
+        <tr>
+            <td>{{ seance.type }}</td>
+
+            <td>
+                {% if seance.date %}
+                    {{ seance.date|date('d/m/Y H:i') }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+            <td>{{ seance.duree }}</td>
+            <td>{{ seance.lieu }}</td>
+
+            <!-- Coach -->
+            <td>
+                {% if seance.coach and seance.coach.user %}
+                    {{ seance.coach.user.nom }}
+                    {{ seance.coach.user.prenom }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+            <!-- Spécialité -->
+            <td>
+                {% if seance.coach and seance.coach.specialite %}
+                    {{ seance.coach.specialite }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+            <!-- Expérience -->
+            <td>
+                {% if seance.coach and seance.coach.experience %}
+                    {{ seance.coach.experience }} 
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+            <!-- Réservations -->
+            <td>
+                {% if seance.reservations|length > 0 %}
+                    {% for reservation in seance.reservations %}
+                        {% if reservation.client and reservation.client.user %}
+                            {{ reservation.client.user.nom }}
+                            ({{ reservation.dateReservation|date('d/m/Y H:i') }})
+                            <br>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    Aucune réservation
+                {% endif %}
+            </td>
+
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="8">Aucune séance trouvée</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+{% endblock %}

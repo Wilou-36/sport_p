@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sport Pro Performance{% endblock %}
+
+{% block body %}
+
+<header style="background:#0B0F14; color:white; padding:15px 30px; border-bottom:1px solid #1F2937;">
+    <div style="display:flex; align-items:center; justify-content:space-between; max-width:1100px; margin:auto;">
+
+        <div>
+            <img src="{{ asset('images/logo.png') }}" alt="Logo SPP" style="height:50px;">
+        </div>
+
+        <nav>
+            <a href="#" style="color:#F5C77A;">Pôle CNED</a>
+            <a href="#" style="color:#F5C77A; margin-left:20px;">Groupe élite</a>
+            <a href="#" style="color:#F5C77A; margin-left:20px;">Nous contacter</a>
+        </nav>
+
+        <div>
+            {% if app.user %}
+                <a href="{{ path('app_logout') }}" class="btn btn-login">
+                   Déconnexion
+                </a>
+            {% else %}
+                <a href="{{ path('app_register') }}" class="btn btn-register">
+                   S’inscrire
+                </a>
+
+                <a href="{{ path('app_login') }}" class="btn btn-login">
+                   Se connecter
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+
+<main style="max-width:900p;">
+
+    <h1>Former des footballeurs complets, bâtir des parcours durables grâce au double projet</h1>
+
+    <h2>Accompagner les talents de demain, sur le terrains et dans la vies</h2>
+
+    <p>
+        Chez Sport Pro Performance Solidarity, nous sommes plus qu'un simple encadrement sportif: nous sommes un groupe engagé dans l'avenir global de jeune sportif.
+
+        Nous croyons que la réussite ne se mesure pas uniquement à travers les performances sur le terrain, mais aussi dans la capacité à construireun projet de vie solide, équilibre et durable.
+
+        Notre mission est claire: permettre à chaque sportif de s'épanouir à la fois dans le sport et dans les études, en l'accompagnant à chaque étape de son parcours.
+
+        Nous mettons tout en oeuvre pourgarantir l'équilibre du double projet:
+    </p>
+    <ul>
+        <li><b>Enquêter</b>Un accompagnement sportif de qualité, adapté aux exigences de la compétition.</li>
+        <li><b>Cibler</b> Un suivi éducatif indidualisé (emploi du temps aménagé, soutien scolaire, CNED, coaching).</li>
+        <li><b>Opérer</b>Des partenariats avec des structures académiques pour valider des diplômes reconnus</li>
+        <li><b>Un travail sur l'orientation, la préparation à l'après-carrière et le développement personnel.</li>
+
+    </ul>
+
+    <p>
+        Ce dispositif permet d’assurer une préparation physique, mentale et stratégique
+        adaptée aux exigences du sport de haut niveau.
+    </p>
+
+    <h2>Un pont entre sport et entreprise</h2>
+
+    <p>
+        Les qualités développées dans le sport — discipline, gestion du stress, leadership,
+        résilience — sont hautement transférables dans le monde professionnel.
+    </p>
+
+    <h2>Ambassadeur SPP</h2>
+
+    <div style="display:flex; align-items:center; gap:20px;">
+        <img src="{{ asset('images/coach.jpg') }}" alt="Coach" style="width:150px; border-radius:10px;">
+        <div>
+            <h3>Anin Kévin</h3>
+            <p>Ancien footballeur</p>
+        </div>
+    </div>
+
+</main>
+
+<footer style="background:#0B0F14; color:white; padding:20px; text-align:center; border-top:1px solid #1F2937;">
+    <p>
+        1 rue Jean Monnet - 28000 Chartres <br>
+        06 23 59 54 39 - sppsolidarity@gmail.com
+    </p>
+</footer>
+
+{% endblock %}
+  

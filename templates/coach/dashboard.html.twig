@@ -1,0 +1,16 @@
+{% extends 'app/base.html.twig' %}
+
+{% block body %}
+<h1>Tableau de bord Coach</h1>
+
+<p>Bienvenue {{ user.prenom }}</p>
+
+<ul>
+    <li><a href="{{ path('coach_seances') }}">Gérer mes séances</a></li>
+    <li><a href="{{ path('coach_clients') }}">Voir mes clients</a></li>
+    <li><a href="{{ path('client_profil', {'_locale': app.request.locale}) }}">Mon profil</a></li>
+    <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+</ul>
+
+
+{% endblock %}

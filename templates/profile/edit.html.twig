@@ -1,0 +1,61 @@
+{% extends 'app/base.html.twig' %}
+
+{% block body %}
+
+<div class="premium-profile-container">
+
+    <div class="premium-profile-card">
+
+        <h2>Modifier mon profil</h2>
+
+        <form method="POST">
+
+            <!-- INFOS USER -->
+            <input type="text" name="prenom"
+                   value="{{ user.prenom }}"
+                   placeholder="Prénom"
+                   required>
+
+            <input type="text" name="nom"
+                   value="{{ user.nom }}"
+                   placeholder="Nom"
+                   required>
+
+            <input type="email" name="email"
+                   value="{{ user.email }}"
+                   placeholder="Email"
+                   required>
+
+            {# ================= COACH ================= #}
+            {% if is_granted('ROLE_COACH') %}
+                <input type="text" name="telephone"
+                       value="{{ user.coach.telephone }}"
+                       placeholder="Téléphone">
+            {% endif %}
+
+            {# ================= CLIENT ================= #}
+            {% if is_granted('ROLE_CLIENT') %}
+                <input type="text" name="telephone"
+                       value="{{ user.client.telephone }}"
+                       placeholder="Téléphone">
+
+                <input type="number" step="0.01" name="taille"
+                       value="{{ user.client.taille }}"
+                       placeholder="Taille (m)">
+
+                <input type="number" step="0.01" name="poids"
+                       value="{{ user.client.poids }}"
+                       placeholder="Poids (kg)">
+            {% endif %}
+
+            <button class="btn-premium-edit">
+                Enregistrer
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

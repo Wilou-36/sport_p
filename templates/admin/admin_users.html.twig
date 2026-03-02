@@ -1,0 +1,61 @@
+{% extends 'dashboard/admin.html.twig' %}
+
+{% block admin_content %}
+
+<h2>Gestion des utilisateurs</h2>
+
+{# 🔐 Bouton visible uniquement pour ctrl_admin #}
+{% if app.user and app.user.ctrlAdmin %}
+    <div style="margin-bottom:20px;">
+        <a href="{{ path('admin_new_user') }}" class="btn btn-admin">
+            ➕ Créer un nouveau compte administrateur
+        </a>
+    </div>
+{% endif %}
+
+<table class="full-width-table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Super Admin</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    {% for user in users %}
+        <tr>
+            <td>{{ user.nom }}</td>
+            <td>{{ user.prenom }}</td>
+            <td>{{ user.email }}</td>
+
+            <td>
+                {% if 'ROLE_ADMIN' in user.roles %}
+                    Admin
+                {% elseif 'ROLE_COACH' in user.roles %}
+                    Coach
+                {% elseif 'ROLE_CLIENT' in user.roles %}
+                    Client
+                {% endif %}
+            </td>
+
+            <td>
+                {% if user.ctrlAdmin %}
+                    <span style="color:green;font-weight:bold;">Oui</span>
+                {% else %}
+                    Non
+                {% endif %}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="5">Aucun utilisateur trouvé</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+{% endblock %}

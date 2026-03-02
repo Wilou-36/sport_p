@@ -1,0 +1,127 @@
+/* ===============================
+   DASHBOARD PREMIUM SPORT DARK
+================================= */
+
+.dashboard-wrapper {
+    width: 100%;
+}
+
+/* HEADER */
+.dashboard-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.dashboard-header h2 {
+    font-size: 28px;
+    margin: 0;
+}
+
+.dashboard-header p {
+    opacity: 0.7;
+    margin-top: 6px;
+}
+
+/* BUTTONS */
+.dashboard-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, #00ff88, #00d4ff);
+    color: #0B0F14;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,255,136,0.3);
+}
+
+.btn-secondary {
+    border: 1px solid #00ff88;
+    color: #00ff88;
+}
+
+.btn-secondary:hover {
+    background: rgba(0,255,136,0.1);
+}
+
+/* GRID */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 65% 35%;
+    gap: 30px;
+}
+
+/* GRAPH */
+.graph-box {
+    background: white;
+}
+
+body.dark-mode .graph-box {
+    background: linear-gradient(145deg, #0f172a, #0b1220);
+}
+/* STATS */
+.stats-box {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.stat-card {
+    background: white;
+    color: #111827;
+}
+
+body.dark-mode .stat-card {
+    background: #111827;
+    color: white;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+}
+
+.stat-card.highlight {
+    border: 1px solid #00ff88;
+}
+
+/* NEXT SESSION */
+.next-session {
+    margin-top: 35px;
+}
+
+.next-session div {
+    background: white;
+    color: #111827;
+}
+
+body.dark-mode .next-session div {
+    background: #111827;
+    color: white;
+}
+/* SIDEBAR LOGO */
+.sidebar-logo {
+    width: 60px;
+    display: block;
+    margin: 0 auto 15px auto;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1000px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}

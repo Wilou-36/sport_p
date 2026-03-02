@@ -1,0 +1,67 @@
+{% extends 'app/base.html.twig' %}
+
+{% block title %}Dashboard Client{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/client_dashboard.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="dashboard-wrapper">
+
+    <div class="dashboard-container">
+        <!-- COLONNE GAUCHE -->
+        <div class="dashboard-left">
+
+            <div class="dashboard-main-card">
+                <h2>Bonjour {{ app.user.prenom }}</h2>
+                <p>Objectif : {{ goal }} séances</p>
+            </div>
+
+            <div class="graph-box">
+                <canvas id="sessionsChart"></canvas>
+            </div>
+
+        </div>
+        <!-- COLONNE DROITE -->
+    <div class="dashboard-right">
+
+         <div class="stats-grid">
+            <div class="stat-card">
+                <h4>Âge</h4>
+                <p>{{ app.user.client.age ?? '-' }}</p>
+            </div>
+
+            <div class="stat-card">
+                <h4>Ce mois</h4>
+                <p>{{ monthlyCount }}</p>
+            </div>
+
+            <div class="stat-card highlight">
+                <h4>Progression</h4>
+                <p>{{ progressRate }}%</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+    
+    <!-- NEXT SESSION -->
+    <div class="next-session">
+         {% if nextSession %}
+            <h4>{{ nextSession.type }}</h4>
+            <p>
+                {{ nextSession.date|date('d/m/Y H:i') }}
+            </p>
+            <p>{{ nextSession.lieu }}</p>
+        {% else %}
+            <p>Aucune séance prévue.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

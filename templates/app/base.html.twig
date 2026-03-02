@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Sport Pro Performance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body class="layout">
+
+<nav class="navbar">
+    <div class="nav-wrapper">
+
+        <!-- LOGO -->
+        <div class="brand">
+            <img src="{{ asset('images/logo.png') }}" class="logo" alt="logo">
+        </div>
+
+        <!-- MENU -->
+       <div class="nav-links-desktop">
+
+        {% if app.user %}
+
+            {# ================= CLIENT ================= #}
+            {% if is_granted('ROLE_CLIENT') %}
+
+                <a href="{{ path('client_dashboard') }}" class="nav-item">
+                    📊 Menu
+                </a>
+
+                <a href="{{ path('client_objectifs') }}" >
+                    🎯 Mes Objectifs
+                </a>
+
+                <a href="{{ path('client_coachs') }}">
+                    Voir les coachs
+                </a>
+
+                <a href="{{ path('client_seances', {'_locale': app.request.locale}) }}" class="nav-item">
+                    📅 Mes séances
+                </a>
+
+                <a href="{{ path('client_reservations') }}" class="nav-item">
+                    📝 Réservations
+                </a>
+
+                <a href="{{ path('profile_index', {'_locale': app.request.locale}) }}" class="nav-item">
+                    👤 Mon Profil
+                </a>
+
+            {% endif %}
+
+
+            {# ================= COACH ================= #}
+            {% if is_granted('ROLE_COACH') %}
+
+                <a href="{{ path('coach_dashboard') }}" class="nav-item">
+                    🏋️ Menu
+                </a>
+
+                <a href="{{ path('coach_clients') }}" class="nav-item">
+                    👥 Mes Clients
+                </a>
+
+                <a href="{{ path('coach_seances') }}" class="nav-item">
+                    📅 Séances
+                </a>
+                
+                 <a href="{{path('coach_stats')}}" class="nav-item">
+                    📊 Statistiques
+                </a>
+
+                <a href="{{ path('coach_profile') }}" class="nav-item">
+                    👤 Mon Profil
+                </a>
+
+            {% endif %}
+
+
+            {# ================= ADMIN ================= #}
+            {% if is_granted('ROLE_ADMIN') %}
+
+                <a href="{{ path('admin_dashboard') }}" class="nav-item">
+                    📊 Dashboard
+                </a>
+
+                <a href="{{ path('admin_users') }}" class="nav-item">
+                    👥 Utilisateurs
+                </a>
+
+                <a href="{{ path('admin_seances') }}" class="nav-item">
+                    📅 Séances
+                </a>
+
+                <a href="{{ path('admin_settings') }}" class="nav-item">
+                    ⚙ Paramètres
+                </a>
+
+            {% endif %}
+
+            {# ================= USER INFO ================= #}
+            
+            {% if app.user %}
+                {% set unread = app.user.notifications|filter(n => not n.isRead)|length %}
+
+                <a href="{{ path('notifications_index') }}" class="notif-icon">
+                    🔔
+                    {% if unread > 0 %}
+                        <span class="notif-badge">{{ unread }}</span>
+                    {% endif %}
+                </a>
+            {% endif %}
+            <a href="{{ path('app_logout') }}" class="logout-link">
+                🚪 Déconnexion
+            </a>
+
+        {% endif %}
+
+    </div>
+
+        <!-- hamburger déclenché sur petits écrans -->
+        <div class="hamburger" onclick="toggleSidebar()">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+
+</nav>
+
+
+<!-- CONTENU PRINCIPAL -->
+<main class="main-content">
+    {% block body %}{% endblock %}
+</main>
+
+
+{% block javascripts %}
+
+    <!-- 1️⃣ Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- 2️⃣ Script Graphique -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const canvas = document.getElementById('clientChart');
+            if (!canvas) return;
+
+            fetch("{{ path('client_stats_api') }}")
+                .then(response => response.json())
+                .then(data => {
+
+                    new Chart(canvas, {
+                        type: 'line',
+                        data: {
+                            labels: data.labels,
+                            datasets: [
+                                {
+                                    label: 'Réalisé',
+                                    data: data.realise,
+                                    borderColor: '#00ff88',
+                                    backgroundColor: 'rgba(0,255,136,0.15)',
+                                    tension: 0.4,
+                                    fill: true
+                                },
+                                {
+                                    label: 'Objectif',
+                                    data: data.objectif,
+                                    borderColor: '#3b82f6',
+                                    borderDash: [5,5],
+                                    tension: 0.4,
+                                    fill: false
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: "#111"
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: { color: "#111" }
+                                },
+                                y: {
+                                    ticks: { color: "#111" }
+                                }
+                            }
+                        }
+                    });
+
+                })
+                .catch(error => console.error("Erreur API stats:", error));
+        });
+
+        function toggleSidebar() {
+            document.querySelector('.app-sidebar')?.classList.toggle('active');
+        }
+
+        // dark mode support
+        function applyDarkMode(enabled) {
+            document.body.classList.toggle('dark-mode', enabled);
+            // update any checkboxes
+            document.querySelectorAll('#darkModeToggle').forEach(cb => cb.checked = enabled);
+        }
+
+        function toggleLangMenu(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('langMenu');
+            menu?.classList.toggle('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const stored = localStorage.getItem('darkMode');
+            const enabled = stored === '1';
+            applyDarkMode(enabled);
+
+            document.querySelectorAll('#darkModeToggle').forEach(cb => {
+                cb.addEventListener('change', e => {
+                    const on = e.target.checked;
+                    applyDarkMode(on);
+                    localStorage.setItem('darkMode', on ? '1' : '0');
+                });
+            });
+
+            // Close language menu when clicking outside
+            document.addEventListener('click', (e) => {
+                const langMenu = document.getElementById('langMenu');
+                const langBtn = document.querySelector('.lang-btn-toggle');
+                
+                if (langMenu && !langMenu.contains(e.target) && !langBtn?.contains(e.target)) {
+                    langMenu.classList.remove('active');
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
+
+</body>
+</html>

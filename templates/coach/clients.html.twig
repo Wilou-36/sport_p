@@ -1,0 +1,95 @@
+{% extends 'app/base.html.twig' %}
+
+{% block body %}
+
+<div class="coach-clients">
+
+    <h1>👥 Mes Clients</h1>
+
+    <div class=" btn filter-bar">
+        <a href="{{ path('coach_clients') }}"
+        class="btn {{ filter != 'subscribed' ? 'btn-active' : '' }}">
+            Tous les clients
+        </a>
+
+        <a href="{{ path('coach_clients', {'filter': 'subscribed'}) }}"
+        class="btn {{ filter == 'subscribed' ? 'btn-active' : '' }}">
+            Clients abonnés
+        </a>
+    </div>
+
+    <div class="clients-grid">
+
+        {% for item in clientsData %}
+            {% set client = item.client %}
+            {% set objectifs = item.objectifs %}
+
+            <div class="client-card" onclick="toggleCard(this)">
+
+                <div class="client-header">
+                    <h3>{{ client.prenom }} {{ client.nom }}</h3>
+                </div>
+
+                <div class="client-info">
+                    <p>📞 {{ client.telephone ?? 'Non renseigné' }}</p>
+                    <p>📏 Taille : {{ client.taille ?? '-' }} m</p>
+                    <p>⚖ Poids : {{ client.poids ?? '-' }} kg</p>
+                    <p>🏅 Sport : {{ client.sport ? client.sport.nom : 'Non défini' }}</p>
+                </div>
+
+                <div class="client-details">
+
+                    <h4>🎯 Objectifs</h4>
+
+                    {% if objectifs|length > 0 %}
+                        {% for objectif in objectifs %}
+                            <div class="objectif-item">
+
+                                <strong>{{ objectif.macrocycle }}</strong>
+
+                                <span class="badge 
+                                    {% if objectif.statut == 'actif' %}
+                                        badge-active
+                                    {% else %}
+                                        badge-done
+                                    {% endif %}
+                                ">
+                                    {{ objectif.statut }}
+                                </span>
+
+                                <p>
+                                    Performance cible :
+                                    {{ objectif.performanceObjectif ?? '-' }}
+                                </p>
+
+                                <small>
+                                    {{ objectif.dateDebut|date('d/m/Y') }}
+                                    →
+                                    {{ objectif.dateFin|date('d/m/Y') }}
+                                </small>
+
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>Aucun objectif défini.</p>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        {% else %}
+            <p>Aucun client pour le moment.</p>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<script>
+function toggleCard(card) {
+    card.classList.toggle("active");
+}
+</script>
+
+{% endblock %}

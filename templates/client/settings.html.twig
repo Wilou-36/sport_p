@@ -1,0 +1,77 @@
+{% extends 'app/base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+<div class="app-container">
+
+    <!-- HEADER -->
+    <div class="profile-header">
+        <div class="avatar">
+            <img src="https://i.pravatar.cc/150?img=12" alt="Avatar">
+        </div>
+        <h2>{{ app.user.prenom }} {{ app.user.nom }}</h2>
+        <p class="email">{{ app.user.email }}</p>
+
+        {% if 'ROLE_PREMIUM' in app.user.roles %}
+            <span class="badge-premium">Premium Member</span>
+        {% else %}
+            <a href="#" class="btn-upgrade">Passer Premium</a>
+        {% endif %}
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Objectif</h3>
+            <p>{{ client.objectifs ?? 'Non défini' }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Taille</h3>
+            <p>{{ client.taille ?? '-' }} cm</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Poids</h3>
+            <p>{{ client.poids ?? '-' }} kg</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Sport</h3>
+            <p>{{ client.sport.nom ?? '-' }}</p>
+        </div>
+    </div>
+
+    <!-- PARAMETRES -->
+    <div class="settings-card">
+        <h3>Paramètres</h3>
+
+        <div class="setting-item">
+            <span>Changer mot de passe</span>
+            <a href="#" class="setting-btn">Modifier</a>
+        </div>
+
+        <div class="setting-item">
+            <span>Notifications</span>
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting-item">
+            <span>Mode sombre</span>
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting-item logout">
+            <a href="{{ path('app_logout') }}" class="logout-link">Se déconnecter</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

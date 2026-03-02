@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mentions Légales{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5" style="max-width:900px;">
+
+<h1>Mentions Légales</h1>
+
+<h2>1. Éditeur du site</h2>
+<p>
+<strong>Sport Pro Performance Solidarity</strong><br>
+Micro-entreprise<br>
+Siège social : 222 rue Gaston Couté, 28000 Chartres, France<br>
+Numéro SIRET : 888 916 913 00013<br>
+Responsable de publication : Do Rego Williams (Étudiant)<br>
+Email : contact@sportproperformance.fr
+</p>
+
+<h2>2. Hébergement</h2>
+<p>
+Hébergeur : En cours de sélection.<br>
+Les informations relatives à l’hébergement seront mises à jour dès contractualisation.
+</p>
+
+<h2>3. Activité</h2>
+<p>
+La plateforme a pour objet la mise en relation entre coachs sportifs
+et clients dans le cadre d’activités d’accompagnement sportif.
+</p>
+
+<h2>4. Propriété intellectuelle</h2>
+<p>
+Tous les éléments présents sur le site (textes, images, logo, design,
+code source) sont protégés par le droit de la propriété intellectuelle.
+Toute reproduction, représentation ou diffusion sans autorisation
+est interdite.
+</p>
+
+<h2>5. Responsabilité</h2>
+<p>
+La plateforme agit exclusivement en tant qu’intermédiaire technique
+entre coachs et clients.
+</p>
+
+<p>
+Sport Pro Performance Solidarity ne saurait être tenu responsable
+des prestations réalisées par les coachs ni des dommages résultant
+d’une activité sportive.
+</p>
+
+<h2>6. Données personnelles</h2>
+<p>
+Les données personnelles sont traitées conformément au RGPD
+(Règlement UE 2016/679).
+</p>
+
+<p>
+Pour plus d’informations, consultez la
+<a href="{{ path('app_privacy') }}">Politique de Confidentialité</a>.
+</p>
+
+</div>
+{% endblock %}

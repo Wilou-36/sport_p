@@ -2,16 +2,172 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Sport Pro Performance{% endblock %}</title>
+        <link rel="icon" href="{{ asset('images/logo.png') }}">
+        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+        
+        {% block stylesheets %}{% endblock %}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="layout">
+
+        <nav class="navbar">
+            <div class="nav-wrapper">
+                <div class="brand">
+                    <a href="{{ path('home') }}">
+                        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+                        <link rel="icon" href="{{ asset('images/logo.png') }}">
+                    </a>
+                </div>
+
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                {# Liens de navigation #}
+                <div class="nav-links-desktop">
+                    <a href="{{ path('pole_cned') }}">Pôle CNED</a>
+                    <a href="{{ path('groupe_elite') }}">Groupe élite</a>
+                    <a href="{{ path('nous_contacter') }}">Nous contacter</a>
+
+                    {% if app.user %}
+
+                        {% if is_granted('ROLE_CLIENT') %}
+                            <a href="{{ path('client_dashboard') }}">Espace Client</a>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_COACH') %}
+                            <a href="{{ path('coach_dashboard') }}">Espace Coach</a>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('admin_dashboard') }}">Espace Admin</a>
+                        {% endif %}
+
+                        <a href="{{ path('app_logout') }}" class="btn btn-logout">
+                            Déconnexion
+                        </a>
+
+                    {% else %}
+                        <a href="{{ asset('download_app') }}" download class="btn btn-logout">
+                             Télécharger l'application
+                        </a>
+
+                        <a href="{{ path('app_register') }}" class="btn btn-register">
+                            S’inscrire
+                        </a>
+
+                        <a href="{{ path('app_login') }}" class="btn btn-login">
+                            Se connecter
+                        </a>
+
+                    {% endif %}
+
+                </div>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            {% block body %}{% endblock %}
+        </div>
+        <footer class="footer">
+            <div class="footer-container">
+
+                <div class="footer-col">
+                    <img src="{{ asset('images/logo.png') }}" alt="logo" class="footer-logo">
+                    <p>
+                        1 rue Jean Monnet<br>
+                        28000 Chartres<br>
+                        06 23 59 54 39<br>
+                        sppsolidarity@gmail.com
+                        </p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Partenaires</h4>
+                    <div class="footer-partners">
+                        <a href="https://www.sciences-service.com">
+                             <img src="{{ asset('images/part1.png') }}" alt="" >
+                        </a>
+                        <a href ="https://ifepsa.uco.fr/fr">
+                            <img src="{{ asset('images/part3.png') }}" alt="">
+                        </a> 
+                        <a href="https://assoapart.com">
+                            <img src="{{ asset('images/part5.png') }}" alt="">
+                        </a>
+                        <a href="https://fr.uefa.com/">
+                            <img src="{{ asset('images/part9.png') }}" alt="">
+                        </a>
+                        <img src="{{ asset('images/part10.png') }}" alt="assoc albiceleste">
+                        <img src="{{ asset('images/part4.png') }}" alt="sport pro solidarity">
+                        <img src="{{ asset('images/part6.png') }}" alt="erts cfas ardeqaf">
+                        <a href="https://initiatives.asso.fr/">
+                            <img src="{{ asset('images/part8.png') }}" alt="initiative asso">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Suivez-nous</h4>
+                    <div class="footer-social">
+                        <a href="#">Facebook</a>
+                        <a href="#">Instagram</a>
+                        <a href="#">LinkedIn</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                © {{ "now"|date("Y") }} Sport Pro Performance Solidarity — Tous droits réservés<br>
+                 <a href="{{ path('app_cgu') }}">CGU</a> |
+                <a href="{{ path('app_privacy') }}">Politique de Confidentialité</a>  |
+                <a href="{{ path('app_legal') }}">Mentions Légales</a>
+            </div>
+        </footer>
+
+        
+        <script>
+        document.addEventListener("turbo:load", function () {
+
+            // HAMBURGER
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('navMenu');
+
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', () => {
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+
+                document.querySelectorAll('#navMenu a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    });
+                });
+            }
+
+            // TOGGLE PASSWORD
+            document.querySelectorAll('.toggle-password').forEach(button => {
+                button.addEventListener('click', function () {
+                    const input = this.previousElementSibling;
+
+                    if (input.type === "password") {
+                        input.type = "text";
+                        this.textContent = "🙈";
+                    } else {
+                        input.type = "password";
+                        this.textContent = "👁";
+                    }
+                });
+            });
+
+        });
+        </script>
     </body>
 </html>

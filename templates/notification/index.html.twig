@@ -1,0 +1,42 @@
+{% extends 'app/base.html.twig' %}
+
+{% block body %}
+
+<div class="notifications-container">
+
+    <div class="notifications-header">
+        <h2>🔔 Notifications</h2>
+        <a href="{{ path('notifications_read_all') }}" class="btn-mark-all">
+            Tout marquer comme lu
+        </a>
+    </div>
+
+    {% for notif in notifications|reverse %}
+        <div class="notification-card {% if not notif.isRead %}unread{% endif %}">
+
+            <div class="notification-content">
+                <p>{{ notif.message }}</p>
+                <small>{{ notif.createdAt|date('d/m/Y H:i') }}</small>
+            </div>
+
+            <div class="notification-actions">
+                {% if not notif.isRead %}
+                    <a href="{{ path('notifications_read', {'id': notif.id}) }}">
+                        ✅
+                    </a>
+                {% endif %}
+
+                <a href="{{ path('notifications_delete', {'id': notif.id}) }}">
+                    🗑
+                </a>
+            </div>
+
+        </div>
+
+    {% else %}
+        <p>Aucune notification.</p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

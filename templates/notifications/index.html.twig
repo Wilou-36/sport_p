@@ -1,0 +1,17 @@
+{% extends 'app/base.html.twig' %}
+
+{% block body %}
+    <h1>Notifications</h1>
+
+    <ul class="notifications-list">
+        {% for n in notifications %}
+            <li class="notification-item {{ n.isRead ? 'read' : 'unread' }}">
+                <div class="message">{{ n.message }}</div>
+                <div class="meta">{{ n.createdAt|date('d/m/Y H:i') }} - {{ n.type }}</div>
+            </li>
+        {% else %}
+            <li>Aucune notification.</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'app/base.html.twig' %}
+
+{% block body %}
+
+<div class="stats-container">
+
+    <h1>📊 Statistiques & Avis</h1>
+
+    <div class="average-card">
+        <h2>Moyenne des notes</h2>
+
+        <div class="rating-display">
+            {% for i in 1..5 %}
+                {% if i <= average %}
+                    <span class="runner filled">🏃</span>
+                {% else %}
+                    <span class="runner">🏃</span>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <p class="average-score">{{ average }}/5</p>
+    </div>
+
+    <div class="avis-list">
+        <h2>Commentaires clients</h2>
+
+        {% for a in avis %}
+            <div class="avis-card">
+                <div class="avis-rating">
+                    {% for i in 1..a.note %}
+                        <span class="runner filled">🏃</span>
+                    {% endfor %}
+                </div>
+
+                <p class="avis-comment">{{ a.commentaire }}</p>
+            </div>
+        {% else %}
+            <p>Aucun avis pour le moment.</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+
+
+{% endblock %}
