@@ -1,8 +1,7 @@
 security:
 
     password_hashers:
-        App\Entity\User:
-            algorithm: auto
+        App\Entity\User: 'auto' 
 
     providers:
         app_user_provider:
@@ -11,6 +10,9 @@ security:
                 property: email
 
     firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
         main:
             lazy: true
             provider: app_user_provider
