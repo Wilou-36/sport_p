@@ -17,7 +17,7 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
-RUN chmod -R 777 var
+RUN mkdir -p var && chmod -R 777 var
 
 EXPOSE 10000
 
