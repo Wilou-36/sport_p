@@ -22,4 +22,4 @@ RUN chmod -R 775 var
 
 EXPOSE 8080
 
-CMD sh -c "php bin/console doctrine:migrations:migrate --no-interaction && php -S 0.0.0.0:$PORT -t public"
+CMD sh -c "php bin/console doctrine:migrations:migrate --no-interaction || true && php -S 0.0.0.0:$PORT -t public"
