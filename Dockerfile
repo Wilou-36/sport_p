@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.2-cli-alpine
 
 RUN apk add --no-cache \
     git \
@@ -6,8 +6,7 @@ RUN apk add --no-cache \
     libzip-dev \
     icu-dev \
     oniguruma-dev \
-    postgresql-dev \
-    bash
+    postgresql-dev
 
 RUN docker-php-ext-install pdo pdo_pgsql intl zip
 
@@ -18,8 +17,8 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN chmod -R 775 var
+RUN chmod -R 777 var
 
-EXPOSE 8080
+EXPOSE 10000
 
-CMD sh -c "php bin/console doctrine:migrations:migrate --no-interaction || true && php -S 0.0.0.0:$PORT -t public"
+CMD php -S 0.0.0.0:$PORT -t public
